@@ -16,22 +16,41 @@ public class users implements UserDetails {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   int userID;
 
-  @Column(name = "username")
+  @Column(name = "username",unique = true)
   String username;
 
-  @Column(name = "biometricsID")
+  @Column(name = "biometricsID",nullable = false,unique = true)
   int biometricsID;
 
-  @Column(name = "UserRole")
+  @Column(name = "UserRole",nullable = false)
   UserRoles role;
+
+  @Column(name = "isBiometricVerified")
+  boolean isBiometricVerified;
 
   public users() {}
 
-  public users(int userID, String username, int biometricsID, UserRoles role) {
+  public users(String username, int biometricsID, UserRoles role, boolean isBiometricVerified) {
+    this.username = username;
+    this.biometricsID = biometricsID;
+    this.role = role;
+    this.isBiometricVerified = isBiometricVerified;
+  }
+
+  public users(int userID, String username, int biometricsID, UserRoles role, boolean isBiometricVerified) {
     this.userID = userID;
     this.username = username;
     this.biometricsID = biometricsID;
     this.role = role;
+    this.isBiometricVerified = isBiometricVerified;
+  }
+
+  public boolean isBiometricVerified() {
+    return isBiometricVerified;
+  }
+
+  public void setBiometricVerified(boolean biometricVerified) {
+    isBiometricVerified = biometricVerified;
   }
 
   public int getUserID() {

@@ -21,6 +21,11 @@ public class SecurityConfig {
     return httpSecurity.csrf(csrf -> csrf.disable())
             .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
             .authorizeHttpRequests(authorize -> authorize
+                    .requestMatchers(HttpMethod.POST, "/admin/registerNewUser").hasAuthority("ADMIN")
+                    .requestMatchers(HttpMethod.POST, "/auth/verifyBiometric").permitAll()
+                    .requestMatchers(HttpMethod.GET, "/auth/verifyLoginState").permitAll()
+                    .requestMatchers(HttpMethod.POST, "/admin/createProtocol").hasAuthority("ADMIN")
+                    .requestMatchers(HttpMethod.GET, "/admin/dataManager/**").hasAuthority("ADMIN")
                     .anyRequest().permitAll())
             .addFilterBefore(this.internalFilter, UsernamePasswordAuthenticationFilter.class)
             .build();
