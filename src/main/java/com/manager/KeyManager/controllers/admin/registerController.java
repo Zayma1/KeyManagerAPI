@@ -55,15 +55,22 @@ public class registerController {
   public ResponseEntity createProtocol(@RequestBody createProtocolDTO protocolData){
     var getUser = this.usersRepository.findByBiometricsID(protocolData.userBiometric());
     if(getUser != null){
-      LocalDate date = this.dateTimeConvertService.convertDate(protocolData.date());
-      LocalTime time = this.dateTimeConvertService.converTime(protocolData.time());
+      System.out.println(protocolData.Returndate());
+      System.out.println(protocolData.initialDate());
+      LocalDate date = this.dateTimeConvertService.convertDate(protocolData.Returndate());
+      LocalTime time = this.dateTimeConvertService.converTime(protocolData.Returntime());
 
-      LocalDateTime localDate = LocalDateTime.of(date, time);
+      LocalDate initalDate = this.dateTimeConvertService.convertDate(protocolData.initialDate());
+      LocalTime initalTime = this.dateTimeConvertService.converTime(protocolData.initialTime());
+
+      LocalDateTime returnDate = LocalDateTime.of(date, time);
+      LocalDateTime initDate = LocalDateTime.of(initalDate,initalTime);
 
       protocols newProtocol = new protocols(
               getUser,
               protocolStatus.AVAILABLE,
-              localDate
+              initDate,
+              returnDate
       );
       this.protocolRepository.save(newProtocol);
       return ResponseEntity.ok().build();

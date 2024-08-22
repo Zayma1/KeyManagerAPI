@@ -17,22 +17,35 @@ public class protocols {
   @Column(name = "protocolStatus")
   private protocolStatus status;
 
+  @Column(name = "initialDate")
+  private LocalDateTime initialDate;
+
   @Column(name = "returnDate")
   private LocalDateTime returnDate;
 
   public protocols(){}
 
-  public protocols(int protocolID, users user, protocolStatus status, LocalDateTime returnDate) {
-    this.protocolID = protocolID;
+  public protocols(users user, protocolStatus status, LocalDateTime initialDate, LocalDateTime returnDate) {
     this.user = user;
     this.status = status;
+    this.initialDate = initialDate;
     this.returnDate = returnDate;
   }
 
-  public protocols(users user, protocolStatus status, LocalDateTime returnDate) {
+  public protocols(int protocolID, users user, protocolStatus status, LocalDateTime initialDate, LocalDateTime returnDate) {
+    this.protocolID = protocolID;
     this.user = user;
     this.status = status;
+    this.initialDate = initialDate;
     this.returnDate = returnDate;
+  }
+
+  public LocalDateTime getInitialDate() {
+    return initialDate;
+  }
+
+  public void setInitialDate(LocalDateTime initialDate) {
+    this.initialDate = initialDate;
   }
 
   public int getProtocolID() {

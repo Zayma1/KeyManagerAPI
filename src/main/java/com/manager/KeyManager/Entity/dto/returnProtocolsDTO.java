@@ -7,8 +7,11 @@ public record returnProtocolsDTO(
         int protocolID,
         registerUserDTO user,
         String status,
-        String date,
-        String time
+        String Returndate,
+        String Returntime,
+
+        String initDate,
+        String initTime
 
 
 ) {

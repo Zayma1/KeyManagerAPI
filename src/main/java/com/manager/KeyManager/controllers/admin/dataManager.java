@@ -63,7 +63,9 @@ public class dataManager {
               filterUser,
               p.getStatus().getStatusName(),
               p.getReturnDate().toLocalDate().toString(),
-              p.getReturnDate().toLocalTime().toString()
+              p.getReturnDate().toLocalTime().toString(),
+              p.getInitialDate().toLocalDate().toString(),
+              p.getInitialDate().toLocalTime().toString()
       );
       protocols.add(addProtocol);
     });
@@ -74,14 +76,18 @@ public class dataManager {
   @PostMapping("/updateProtocolData")
   public ResponseEntity updateProtocolData(@RequestBody createProtocolDTO newProtocolData){
     protocolStatus getStatus = protocolStatus.fromString(newProtocolData.status());
-    LocalTime time = this.dateTimeConvertService.converTime(newProtocolData.time());
-    LocalDate date = this.dateTimeConvertService.convertDate(newProtocolData.date());
-    LocalDateTime localDateTime = LocalDateTime.of(date,time);
+    LocalTime time = this.dateTimeConvertService.converTime(newProtocolData.Returntime());
+    LocalDate date = this.dateTimeConvertService.convertDate(newProtocolData.Returndate());
+    LocalTime initTime = this.dateTimeConvertService.converTime(newProtocolData.initialTime());
+    LocalDate initDate = this.dateTimeConvertService.convertDate(newProtocolData.initialDate());
+    LocalDateTime returnDate = LocalDateTime.of(date,time);
+    LocalDateTime initialDate = LocalDateTime.of(initDate,initTime);
 
     this.protocolRepository.updateProtocolData(
           getStatus.ordinal(),
           newProtocolData.userBiometric(),
-          localDateTime.toString(),
+          returnDate.toString(),
+          initialDate.toString(),
           newProtocolData.protocolID()
     );
     return ResponseEntity.ok().build();
