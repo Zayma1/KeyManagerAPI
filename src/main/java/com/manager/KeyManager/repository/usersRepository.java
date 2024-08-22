@@ -14,6 +14,8 @@ public interface usersRepository extends JpaRepository<users,Integer> {
   UserDetails findByusername(String username);
   users findByBiometricsID(int id);
 
+  users findByuserID(int id);
+
   List<users> findAllByrole(UserRoles role);
   @Modifying
   @Transactional

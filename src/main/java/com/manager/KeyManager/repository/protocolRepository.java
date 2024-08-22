@@ -11,6 +11,8 @@ import org.springframework.data.jpa.repository.Query;
 public interface protocolRepository extends JpaRepository<protocols, Integer> {
   protocols findByuser(users user);
 
+  protocols findByprotocolID(int id);
+
   @Modifying
   @Transactional
   @Query(value = "UPDATE protocols SET protocol_status = ?1, user_userid = ?2, return_date = ?3, initial_date = ?4 WHERE protocolid = ?5",nativeQuery = true)

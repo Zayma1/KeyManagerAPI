@@ -105,7 +105,12 @@ public class dataManager {
 
   @PatchMapping("/changeProtocolOwner/{protocolID}/{userid}")
   public ResponseEntity changeProtocolOwner(@PathVariable(value = "protocolID")String protocolID,@PathVariable(value = "userid")String userid){
-    this.protocolRepository.changeOwner(Integer.parseInt(userid), Integer.parseInt(protocolID));
-    return ResponseEntity.ok().build();
+    var getUser = this.usersRepository.findByuserID(Integer.parseInt(userid));
+    var getProtocol = this.protocolRepository.findByprotocolID(Integer.parseInt(protocolID));
+    if(getUser != null && getProtocol != null){
+      this.protocolRepository.changeOwner(Integer.parseInt(userid), Integer.parseInt(protocolID));
+      return ResponseEntity.ok().build();
+    }
+    return ResponseEntity.badRequest().build();
   }
 }
