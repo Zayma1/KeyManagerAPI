@@ -17,7 +17,7 @@ public interface protocolRepository extends JpaRepository<protocols, Integer> {
   @Transactional
   @Query(value = "UPDATE protocols SET protocol_status = ?1, port = ?2, user_userid = ?3, return_date = ?4, initial_date = ?5 WHERE protocolid = ?6",nativeQuery = true)
   void updateProtocolData(
-          int status, int port, int userid, String localDateTime, String initialDate, int protocolID
+          int status, String port, int userid, String localDateTime, String initialDate, int protocolID
   );
 
   @Modifying

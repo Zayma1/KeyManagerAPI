@@ -8,7 +8,7 @@ public record returnProtocolsDTO(
         registerUserDTO user,
         String status,
 
-        int port,
+        String port,
         String Returndate,
         String Returntime,
 

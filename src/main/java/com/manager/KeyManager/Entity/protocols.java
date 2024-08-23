@@ -18,7 +18,7 @@ public class protocols {
   private protocolStatus status;
 
   @Column(name = "port")
-  int port;
+  String port;
 
   @Column(name = "initialDate")
   private LocalDateTime initialDate;
@@ -28,7 +28,7 @@ public class protocols {
 
   public protocols(){}
 
-  public protocols(int protocolID, users user, protocolStatus status, int port, LocalDateTime initialDate, LocalDateTime returnDate) {
+  public protocols(int protocolID, users user, protocolStatus status, String port, LocalDateTime initialDate, LocalDateTime returnDate) {
     this.protocolID = protocolID;
     this.user = user;
     this.status = status;
@@ -37,7 +37,7 @@ public class protocols {
     this.returnDate = returnDate;
   }
 
-  public protocols(users user, protocolStatus status, int port, LocalDateTime initialDate, LocalDateTime returnDate) {
+  public protocols(users user, protocolStatus status, String port, LocalDateTime initialDate, LocalDateTime returnDate) {
     this.user = user;
     this.status = status;
     this.port = port;
@@ -45,11 +45,11 @@ public class protocols {
     this.returnDate = returnDate;
   }
 
-  public int getPort() {
+  public String getPort() {
     return port;
   }
 
-  public void setPort(int port) {
+  public void setPort(String port) {
     this.port = port;
   }
 
