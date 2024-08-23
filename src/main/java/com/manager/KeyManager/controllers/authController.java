@@ -34,7 +34,7 @@ public class authController {
         Authentication auth = new UsernamePasswordAuthenticationToken(getUser.getUsername(), getUser.getPassword(), getUser.getAuthorities());
         SecurityContextHolder.getContext().setAuthentication(auth);
 
-        var token = this.tokenService.GenerateToken((UserDetails) getUser) + "," + getUser.getRole().toString();
+        var token = this.tokenService.GenerateToken((UserDetails) getUser) + "," + getUser.getRole().ordinal();
         return ResponseEntity.ok(token);
       }else{
         return ResponseEntity.notFound().build();
