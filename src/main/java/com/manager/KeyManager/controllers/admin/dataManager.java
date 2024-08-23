@@ -62,6 +62,7 @@ public class dataManager {
               p.getProtocolID(),
               filterUser,
               p.getStatus().getStatusName(),
+              p.getPort(),
               p.getReturnDate().toLocalDate().toString(),
               p.getReturnDate().toLocalTime().toString(),
               p.getInitialDate().toLocalDate().toString(),
@@ -85,6 +86,7 @@ public class dataManager {
 
     this.protocolRepository.updateProtocolData(
           getStatus.ordinal(),
+          newProtocolData.port(),
           newProtocolData.userBiometric(),
           returnDate.toString(),
           initialDate.toString(),

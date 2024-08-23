@@ -69,6 +69,7 @@ public class registerController {
       protocols newProtocol = new protocols(
               getUser,
               protocolStatus.AVAILABLE,
+              protocolData.port(),
               initDate,
               returnDate
       );

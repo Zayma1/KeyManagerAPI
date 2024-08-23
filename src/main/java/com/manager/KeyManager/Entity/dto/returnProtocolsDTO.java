@@ -7,6 +7,8 @@ public record returnProtocolsDTO(
         int protocolID,
         registerUserDTO user,
         String status,
+
+        int port,
         String Returndate,
         String Returntime,
 

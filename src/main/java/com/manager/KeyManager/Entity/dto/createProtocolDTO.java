@@ -7,7 +7,7 @@ import java.time.LocalDateTime;
 public record createProtocolDTO(
         int protocolID,
         int userBiometric,
-
+        int port,
         String initialDate,
         String initialTime,
         String Returndate,
