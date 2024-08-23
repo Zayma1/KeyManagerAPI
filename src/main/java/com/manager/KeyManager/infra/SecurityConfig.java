@@ -26,6 +26,7 @@ public class SecurityConfig {
                     .requestMatchers(HttpMethod.GET, "/auth/verifyLoginState").permitAll()
                     .requestMatchers(HttpMethod.POST, "/admin/createProtocol").hasAuthority("ADMIN")
                     .requestMatchers(HttpMethod.GET, "/admin/dataManager/**").hasAuthority("ADMIN")
+                    .requestMatchers(HttpMethod.GET, "/auth/verifyLogin").permitAll()
                     .anyRequest().permitAll())
             .addFilterBefore(this.internalFilter, UsernamePasswordAuthenticationFilter.class)
             .build();

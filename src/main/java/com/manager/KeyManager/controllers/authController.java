@@ -2,7 +2,9 @@ package com.manager.KeyManager.controllers;
 
 
 import com.manager.KeyManager.repository.usersRepository;
+import com.manager.KeyManager.roles.UserRoles;
 import com.manager.KeyManager.services.TokenService;
+import com.manager.KeyManager.services.loginSaverService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -20,28 +22,19 @@ public class authController {
   @Autowired
   TokenService tokenService;
 
-  @PostMapping("/verifyBiometric/{biometricID}")
-  public ResponseEntity verifyBiometric(@PathVariable(value = "biometricID") String id) {
-    var intID = Integer.parseInt(id);
-    var getUser = this.usersRepository.findByBiometricsID(intID);
-    if (getUser != null) {
-      this.usersRepository.verifyBiometric(true, intID);
-      return ResponseEntity.ok().build();
-    }
-    return ResponseEntity.badRequest().build();
-  }
+  @Autowired
+  loginSaverService loginSaverService;
 
-  @GetMapping("/verifyLoginState/{biometricID}")
-  public ResponseEntity verifyLoginState(@PathVariable(value = "biometricID") String id) {
-    var intID = Integer.parseInt(id);
+  @GetMapping("/verifyLogin")
+  public ResponseEntity verifyLoginState() {
 
-    var getUser = this.usersRepository.findByBiometricsID(intID);
+    var getUser = this.usersRepository.findByBiometricsID(this.loginSaverService.getLastID());
     if (getUser != null) {
       if (getUser.isBiometricVerified()) {
         Authentication auth = new UsernamePasswordAuthenticationToken(getUser.getUsername(), getUser.getPassword(), getUser.getAuthorities());
         SecurityContextHolder.getContext().setAuthentication(auth);
 
-        var token = this.tokenService.GenerateToken((UserDetails) getUser);
+        var token = this.tokenService.GenerateToken((UserDetails) getUser) + "," + getUser.getRole().toString();
         return ResponseEntity.ok(token);
       }else{
         return ResponseEntity.notFound().build();
