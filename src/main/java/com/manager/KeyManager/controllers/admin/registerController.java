@@ -1,7 +1,6 @@
 package com.manager.KeyManager.controllers.admin;
 
 import com.manager.KeyManager.Entity.dto.createProtocolDTO;
-import com.manager.KeyManager.Entity.dto.registerStatusDTO;
 import com.manager.KeyManager.Entity.dto.registerUserDTO;
 import com.manager.KeyManager.Entity.protocols;
 import com.manager.KeyManager.Entity.users;
