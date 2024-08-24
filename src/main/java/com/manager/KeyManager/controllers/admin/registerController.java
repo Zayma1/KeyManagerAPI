@@ -1,6 +1,7 @@
 package com.manager.KeyManager.controllers.admin;
 
 import com.manager.KeyManager.Entity.dto.createProtocolDTO;
+import com.manager.KeyManager.Entity.dto.registerStatusDTO;
 import com.manager.KeyManager.Entity.dto.registerUserDTO;
 import com.manager.KeyManager.Entity.protocols;
 import com.manager.KeyManager.Entity.users;
@@ -9,9 +10,11 @@ import com.manager.KeyManager.repository.usersRepository;
 import com.manager.KeyManager.roles.UserRoles;
 import com.manager.KeyManager.roles.protocolStatus;
 import com.manager.KeyManager.services.TokenService;
+import com.manager.KeyManager.services.arduinoActionService;
 import com.manager.KeyManager.services.dateTimeConvertService;
 import com.manager.KeyManager.services.loginSaverService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -37,6 +40,35 @@ public class registerController {
 
   @Autowired
   TokenService tokenService;
+
+  @Autowired
+  arduinoActionService arduinoActionService;
+
+  @PostMapping("/activeRegisterMode")
+  public ResponseEntity activeRegisterMode(){
+    this.arduinoActionService.setAction(2);
+    return ResponseEntity.ok().build();
+  }
+
+  @PostMapping("/setRegisterBiometricStatus/{status}")
+  public ResponseEntity setRegisterBiometricStatus(@PathVariable(value = "status")String status){
+    var split = status.split(",");
+    if(!split[1].equals("0")){
+      this.arduinoActionService.setRegisterStatusCode(Integer.parseInt(split[1]));
+      this.arduinoActionService.setCurrentRegisterStatus(split[0]);
+      return ResponseEntity.ok().build();
+    }
+    return ResponseEntity.internalServerError().build();
+  }
+
+  @GetMapping("/getRegisterBiometricStatus")
+  public ResponseEntity getRegisterBiometricStatus(){
+    if(this.arduinoActionService.getRegisterStatusCode() == 2){
+      return ResponseEntity.accepted().body(this.loginSaverService.getLastID());
+    }else{
+      return ResponseEntity.ok(this.arduinoActionService.getCurrentRegisterStatus());
+    }
+  }
 
   @PostMapping("/registerNewUser")
   public ResponseEntity registerUser(@RequestBody registerUserDTO userData){

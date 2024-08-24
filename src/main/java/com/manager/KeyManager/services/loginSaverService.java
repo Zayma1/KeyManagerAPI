@@ -5,17 +5,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class loginSaverService {
 
-    int lastID = -1;
-
-    boolean enableBiometric = false;
-
-    public boolean isEnableBiometric() {
-        return enableBiometric;
-    }
-
-    public void setEnableBiometric(boolean enableBiometric) {
-        this.enableBiometric = enableBiometric;
-    }
+    int lastID = 0;
 
     public int getLastID() {
         return lastID;

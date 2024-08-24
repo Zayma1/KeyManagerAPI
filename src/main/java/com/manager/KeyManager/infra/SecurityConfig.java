@@ -31,6 +31,8 @@ public class SecurityConfig {
                     .requestMatchers(HttpMethod.GET, "/admin/dataManager/getUserById").hasAuthority("ADMIN")
                     .requestMatchers(HttpMethod.DELETE, "/admin/dataManager/deleteProtocol").hasAuthority("ADMIN")
                     .requestMatchers(HttpMethod.DELETE, "/admin/dataManager/deleteUser").hasAuthority("ADMIN")
+                    .requestMatchers(HttpMethod.GET, "/arduino/**").permitAll()
+                    .requestMatchers(HttpMethod.POST, "/arduino/**").permitAll()
                     .anyRequest().permitAll())
             .addFilterBefore(this.internalFilter, UsernamePasswordAuthenticationFilter.class)
             .build();
