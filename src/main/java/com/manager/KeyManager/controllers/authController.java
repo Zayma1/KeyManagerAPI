@@ -14,7 +14,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/auth/verifyLogin")
+@RequestMapping("/auth")
 public class authController {
   @Autowired
   usersRepository usersRepository;
@@ -27,17 +27,19 @@ public class authController {
 
   @GetMapping("/verifyLogin")
   public ResponseEntity verifyLoginState() {
+    this.loginSaverService.setEnableBiometric(true);
+    if(this.loginSaverService.getLastID() != -1){
+      var getUser = this.usersRepository.findByBiometricsID(this.loginSaverService.getLastID());
+      if (getUser != null) {
+          Authentication auth = new UsernamePasswordAuthenticationToken(getUser.getUsername(), getUser.getPassword(), getUser.getAuthorities());
+          SecurityContextHolder.getContext().setAuthentication(auth);
 
-    var getUser = this.usersRepository.findByBiometricsID(this.loginSaverService.getLastID());
-    if (getUser != null) {
-      if (getUser.isBiometricVerified()) {
-        Authentication auth = new UsernamePasswordAuthenticationToken(getUser.getUsername(), getUser.getPassword(), getUser.getAuthorities());
-        SecurityContextHolder.getContext().setAuthentication(auth);
-
-        var token = this.tokenService.GenerateToken((UserDetails) getUser) + "," + getUser.getRole().ordinal();
-        return ResponseEntity.ok(token);
+          var token = this.tokenService.GenerateToken((UserDetails) getUser) + "," + getUser.getRole().ordinal();
+          this.loginSaverService.setLastID(-1);
+          this.loginSaverService.setEnableBiometric(false);
+          return ResponseEntity.ok(token);
       }else{
-        return ResponseEntity.notFound().build();
+          return ResponseEntity.notFound().build();
       }
     }
     return ResponseEntity.badRequest().build();

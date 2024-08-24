@@ -74,6 +74,29 @@ public class dataManager {
     return ResponseEntity.ok(protocols);
   }
 
+  @GetMapping("/getUserById/{userID}")
+  public ResponseEntity getUserByID(@PathVariable(value = "userID")String id){
+    var getUser = this.usersRepository.findByuserID(Integer.parseInt(id));
+    if(getUser != null){
+      registerUserDTO returnUser = new registerUserDTO(
+              getUser.getUsername(),
+              getUser.getBiometricsID(),
+              getUser.getRole().ordinal(),
+              getUser.getUserID()
+      );
+      return ResponseEntity.ok(returnUser);
+    }
+    return ResponseEntity.badRequest().build();
+  }
+
+  @GetMapping("/getProtocolById/{protocolID}")
+  public ResponseEntity getProtocolByID(@PathVariable(value = "protocolID")String id){
+    var getProtocol = this.protocolRepository.findByprotocolID(Integer.parseInt(id));
+    if(getProtocol != null){
+      return ResponseEntity.ok(getProtocol);
+    }
+    return ResponseEntity.badRequest().build();
+  }
   @PostMapping("/updateProtocolData")
   public ResponseEntity updateProtocolData(@RequestBody createProtocolDTO newProtocolData){
     protocolStatus getStatus = protocolStatus.fromString(newProtocolData.status());
@@ -114,5 +137,17 @@ public class dataManager {
       return ResponseEntity.ok().build();
     }
     return ResponseEntity.badRequest().build();
+  }
+
+  @DeleteMapping("/deleteUser/{userID}")
+  public ResponseEntity deleteUser(@PathVariable(value = "userID")String id){
+    this.usersRepository.deleteById(Integer.parseInt(id));
+    return ResponseEntity.ok().build();
+  }
+
+  @DeleteMapping("/deleteProtocol/{protocolID}")
+  public ResponseEntity deleteProtocol(@PathVariable(value = "protocolID")String id){
+    this.protocolRepository.deleteById(Integer.parseInt(id));
+    return ResponseEntity.ok().build();
   }
 }

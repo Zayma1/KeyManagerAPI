@@ -10,6 +10,7 @@ import com.manager.KeyManager.roles.UserRoles;
 import com.manager.KeyManager.roles.protocolStatus;
 import com.manager.KeyManager.services.TokenService;
 import com.manager.KeyManager.services.dateTimeConvertService;
+import com.manager.KeyManager.services.loginSaverService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -32,6 +33,9 @@ public class registerController {
   dateTimeConvertService dateTimeConvertService;
 
   @Autowired
+  loginSaverService loginSaverService;
+
+  @Autowired
   TokenService tokenService;
 
   @PostMapping("/registerNewUser")
@@ -42,8 +46,7 @@ public class registerController {
       users newUser = new users(
               userData.username(),
               userData.biometricID(),
-              UserRoles.values()[userData.role()],
-              false
+              UserRoles.values()[userData.role()]
       );
       this.usersRepository.save(newUser);
       return ResponseEntity.ok().build();
@@ -55,8 +58,6 @@ public class registerController {
   public ResponseEntity createProtocol(@RequestBody createProtocolDTO protocolData){
     var getUser = this.usersRepository.findByBiometricsID(protocolData.userBiometric());
     if(getUser != null){
-      System.out.println(protocolData.Returndate());
-      System.out.println(protocolData.initialDate());
       LocalDate date = this.dateTimeConvertService.convertDate(protocolData.Returndate());
       LocalTime time = this.dateTimeConvertService.converTime(protocolData.Returntime());
 

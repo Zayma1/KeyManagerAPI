@@ -19,38 +19,25 @@ public class users implements UserDetails {
   @Column(name = "username",unique = true)
   String username;
 
-  @Column(name = "biometricsID",nullable = false,unique = true)
+  @Column(name = "biometricsID",nullable = false,unique = true )
   int biometricsID;
 
   @Column(name = "UserRole",nullable = false)
   UserRoles role;
 
-  @Column(name = "isBiometricVerified")
-  boolean isBiometricVerified;
-
   public users() {}
 
-  public users(String username, int biometricsID, UserRoles role, boolean isBiometricVerified) {
+  public users(String username, int biometricsID, UserRoles role) {
     this.username = username;
     this.biometricsID = biometricsID;
     this.role = role;
-    this.isBiometricVerified = isBiometricVerified;
   }
 
-  public users(int userID, String username, int biometricsID, UserRoles role, boolean isBiometricVerified) {
+  public users(int userID, String username, int biometricsID, UserRoles role) {
     this.userID = userID;
     this.username = username;
     this.biometricsID = biometricsID;
     this.role = role;
-    this.isBiometricVerified = isBiometricVerified;
-  }
-
-  public boolean isBiometricVerified() {
-    return isBiometricVerified;
-  }
-
-  public void setBiometricVerified(boolean biometricVerified) {
-    isBiometricVerified = biometricVerified;
   }
 
   public int getUserID() {
