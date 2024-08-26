@@ -46,13 +46,29 @@ public class registerController {
   @PostMapping("/activeRegisterMode")
   public ResponseEntity activeRegisterMode(){
     this.arduinoActionService.setAction(2);
+    this.arduinoActionService.setCurrentRegisterStatus("");
+    this.arduinoActionService.setRegisterStatusCode(0);
     return ResponseEntity.ok().build();
   }
 
   @PostMapping("/setRegisterBiometricStatus/{status}")
   public ResponseEntity setRegisterBiometricStatus(@PathVariable(value = "status")String status){
     var split = status.split(",");
+    if(split[1].equals("10")){
+      this.arduinoActionService.setCurrentRegisterStatus("Ocorreu um problema ao cadastrar a digital, por favor tente novamente");
+      this.arduinoActionService.setRegisterStatusCode(10);
+      this.loginSaverService.setLastID(0);
+      this.arduinoActionService.setAction(0);
+    }
+
     if(!split[1].equals("0")){
+      if(split[0].equals("CADASTRO-DA-DIGITAL-CONCLUIDO")){
+        this.arduinoActionService.setRegisterStatusCode(Integer.parseInt(split[1]));
+        this.arduinoActionService.setCurrentRegisterStatus(split[0]);
+        this.arduinoActionService.setAction(0);
+        this.loginSaverService.setLastID(Integer.parseInt(split[1]));
+        return ResponseEntity.ok().build();
+      }
       this.arduinoActionService.setRegisterStatusCode(Integer.parseInt(split[1]));
       this.arduinoActionService.setCurrentRegisterStatus(split[0]);
       return ResponseEntity.ok().build();
@@ -62,11 +78,7 @@ public class registerController {
 
   @GetMapping("/getRegisterBiometricStatus")
   public ResponseEntity getRegisterBiometricStatus(){
-    if(this.arduinoActionService.getRegisterStatusCode() == 2){
-      return ResponseEntity.accepted().body(this.loginSaverService.getLastID());
-    }else{
-      return ResponseEntity.ok(this.arduinoActionService.getCurrentRegisterStatus());
-    }
+    return ResponseEntity.ok(this.arduinoActionService.getCurrentRegisterStatus() + "," + this.arduinoActionService.getRegisterStatusCode());
   }
 
   @PostMapping("/registerNewUser")
@@ -80,6 +92,7 @@ public class registerController {
               UserRoles.values()[userData.role()]
       );
       this.usersRepository.save(newUser);
+      this.loginSaverService.setLastID(0);
       return ResponseEntity.ok().build();
     }
     return ResponseEntity.badRequest().build();
