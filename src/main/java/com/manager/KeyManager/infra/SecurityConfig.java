@@ -27,6 +27,7 @@ public class SecurityConfig {
                     .requestMatchers(HttpMethod.POST, "/admin/createProtocol").hasAuthority("ADMIN")
                     .requestMatchers(HttpMethod.GET, "/admin/dataManager/**").hasAuthority("ADMIN")
                     .requestMatchers(HttpMethod.GET, "/auth/verifyLogin").permitAll()
+                    .requestMatchers(HttpMethod.GET, "/admin/dataManager/getAllProtocols").hasAuthority("ADMIN")
                     .requestMatchers(HttpMethod.GET, "/admin/dataManager/getProtocolById").hasAuthority("ADMIN")
                     .requestMatchers(HttpMethod.GET, "/admin/dataManager/getUserById").hasAuthority("ADMIN")
                     .requestMatchers(HttpMethod.DELETE, "/admin/dataManager/deleteProtocol").hasAuthority("ADMIN")

@@ -8,6 +8,7 @@ import com.manager.KeyManager.repository.usersRepository;
 import com.manager.KeyManager.roles.UserRoles;
 import com.manager.KeyManager.roles.protocolStatus;
 import com.manager.KeyManager.services.dateTimeConvertService;
+import com.manager.KeyManager.services.portService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
@@ -28,13 +29,16 @@ public class dataManager {
   usersRepository usersRepository;
 
   @Autowired
+  portService portService;
+
+  @Autowired
   protocolRepository protocolRepository;
   @GetMapping("/getAllUsers")
   public ResponseEntity getAllUsers(){
     var allUsers = this.usersRepository.findAllByrole(UserRoles.EMPLOYEE);
     List<registerUserDTO> filter = new ArrayList<>();
     allUsers.forEach(u ->{
-      registerUserDTO add = new registerUserDTO(
+      registerUserDTO add = new registerUserDTO( add
               u.getUsername(),
               u.getBiometricsID(),
               1,
@@ -66,7 +70,8 @@ public class dataManager {
               p.getReturnDate().toLocalDate().toString(),
               p.getReturnDate().toLocalTime().toString(),
               p.getInitialDate().toLocalDate().toString(),
-              p.getInitialDate().toLocalTime().toString()
+              p.getInitialDate().toLocalTime().toString(),
+              this.portService.getPortsStatus(p.getPort())
       );
       protocols.add(addProtocol);
     });

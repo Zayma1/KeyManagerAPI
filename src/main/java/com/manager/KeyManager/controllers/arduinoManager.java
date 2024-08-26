@@ -30,7 +30,6 @@ public class arduinoManager {
 
   @GetMapping("/getAction")
   public ResponseEntity getAction(){
-    System.out.println(this.portService.getPort1());
     return ResponseEntity.ok(this.arduinoActionService.getAction());
   }
 
@@ -71,8 +70,9 @@ public class arduinoManager {
     var split = ports.split(",");
     this.portService.setPort1(Integer.parseInt(split[0]));
     this.portService.setPort2(Integer.parseInt(split[1]));
-    //this.portService.setPort3(Integer.parseInt(split[2]));
-    //this.portService.setPort4(Integer.parseInt(split[3]));
+    this.portService.setPort3(Integer.parseInt(split[2]));
+    this.portService.setPort4(Integer.parseInt(split[3]));
+
     return ResponseEntity.ok().build();
   }
 }

@@ -1,7 +1,12 @@
 package com.manager.KeyManager.services;
 
+import com.manager.KeyManager.Entity.dto.portStatusDTO;
+import com.manager.KeyManager.roles.protocolStatus;
 import jakarta.persistence.Entity;
 import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 public class portService {
@@ -40,5 +45,48 @@ public class portService {
 
   public void setPort4(int port4) {
     this.port4 = port4;
+  }
+
+  public List<portStatusDTO> getPortsStatus(String ports){
+      List<portStatusDTO> portsStatus = new ArrayList<>();
+
+      for(int i = 0; i <= ports.length()-1;i++){
+        char character = ports.charAt(i);
+        if(Character.isDigit(character)){
+          if(character == '1'){
+            portStatusDTO portStatus = new portStatusDTO(
+                    "PORTA 1",
+                    protocolStatus.values()[port1]
+            );
+            portsStatus.add(portStatus);
+          }
+
+          if(character == '2'){
+            portStatusDTO portStatus = new portStatusDTO(
+                    "PORTA 2",
+                    protocolStatus.values()[port2]
+            );
+            portsStatus.add(portStatus);
+          }
+
+          if(character == '3'){
+            portStatusDTO portStatus = new portStatusDTO(
+                    "PORTA 3",
+                    protocolStatus.values()[port3]
+            );
+            portsStatus.add(portStatus);
+          }
+
+          if(character == '4'){
+            portStatusDTO portStatus = new portStatusDTO(
+                    "PORTA 4",
+                    protocolStatus.values()[port4]
+            );
+            portsStatus.add(portStatus);
+          }
+        }
+      }
+
+      return portsStatus;
   }
 }

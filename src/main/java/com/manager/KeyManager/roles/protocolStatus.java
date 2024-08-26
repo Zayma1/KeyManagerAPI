@@ -1,8 +1,8 @@
 package com.manager.KeyManager.roles;
 
 public enum protocolStatus {
-  AVAILABLE("DISPONIVEL"),
   GOT("CHAVE RETIRADA"),
+  AVAILABLE("DISPONIVEL"),
   RETURN("DEVOLVER");
 
   private String status;
