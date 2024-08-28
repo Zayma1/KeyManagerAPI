@@ -10,8 +10,8 @@ import java.util.List;
 
 @Service
 public class portService {
-  int port1 = 0;
-  int port2 = 0;
+  int port1 = 1;
+  int port2 = 1;
   int port3 = 0;
   int port4 = 0;
 

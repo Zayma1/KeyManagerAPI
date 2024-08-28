@@ -38,7 +38,7 @@ public class dataManager {
     var allUsers = this.usersRepository.findAllByrole(UserRoles.EMPLOYEE);
     List<registerUserDTO> filter = new ArrayList<>();
     allUsers.forEach(u ->{
-      registerUserDTO add = new registerUserDTO( add
+      registerUserDTO add = new registerUserDTO(
               u.getUsername(),
               u.getBiometricsID(),
               1,

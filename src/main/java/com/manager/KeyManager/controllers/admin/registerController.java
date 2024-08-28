@@ -8,20 +8,20 @@ import com.manager.KeyManager.repository.protocolRepository;
 import com.manager.KeyManager.repository.usersRepository;
 import com.manager.KeyManager.roles.UserRoles;
 import com.manager.KeyManager.roles.protocolStatus;
-import com.manager.KeyManager.services.TokenService;
-import com.manager.KeyManager.services.arduinoActionService;
-import com.manager.KeyManager.services.dateTimeConvertService;
-import com.manager.KeyManager.services.loginSaverService;
+import com.manager.KeyManager.services.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 
-@RestController
+@Controller
 @RequestMapping("/admin")
 public class registerController {
 
@@ -43,6 +43,47 @@ public class registerController {
   @Autowired
   arduinoActionService arduinoActionService;
 
+  @Autowired
+  portService portService;
+
+  @GetMapping("/loginVerify")
+  public String loginVerify(ModelMap model){
+    if(this.loginSaverService.getLastID() != 0){
+      this.loginSaverService.setLastID(0);
+      this.arduinoActionService.setAction(0);
+      return "main";
+    }else{
+      model.addAttribute("status", "Coloque o dedo no leitor...");
+      return "auth";
+    }
+  }
+
+  @GetMapping("/main")
+  public String main(ModelMap model){
+    if(this.portService.getPort1() == 1) model.addAttribute("status1", "CHAVE DISPONÍVEL");
+    else model.addAttribute("status1", "CHAVE RETIRADA");
+
+    if(this.portService.getPort2() == 1) model.addAttribute("status2", "CHAVE DISPONÍVEL");
+    else model.addAttribute("status1", "CHAVE RETIRADA");
+
+    if(this.portService.getPort3() == 1) model.addAttribute("status3", "CHAVE DISPONÍVEL");
+    else model.addAttribute("status3", "CHAVE RETIRADA");
+
+    if(this.portService.getPort4() == 1) model.addAttribute("status4", "CHAVE DISPONÍVEL");
+    else model.addAttribute("status4", "CHAVE RETIRADA");
+
+    return "main";
+  }
+
+  @GetMapping("/RegisterPage")
+  public String registerPage(ModelMap model){
+    this.arduinoActionService.setAction(2);
+    if(this.arduinoActionService.getCurrentRegisterStatus().equals("CADASTRO-DA-DIGITAL-CONCLUIDO")){
+      return "main";
+    }
+    model.addAttribute("status", this.arduinoActionService.getCurrentRegisterStatus());
+    return "register";
+  }
   @PostMapping("/activeRegisterMode")
   public ResponseEntity activeRegisterMode(){
     this.arduinoActionService.setAction(2);
@@ -91,6 +132,7 @@ public class registerController {
               userData.biometricID(),
               UserRoles.values()[userData.role()]
       );
+
       this.usersRepository.save(newUser);
       this.loginSaverService.setLastID(0);
       return ResponseEntity.ok().build();

@@ -6,7 +6,7 @@ import org.springframework.stereotype.Service;
 public class arduinoActionService {
   int action = 0;
 
-  String currentRegisterStatus = "";
+  String currentRegisterStatus = "FEITO O CADASTRO";
 
   int registerStatusCode = 0;
 

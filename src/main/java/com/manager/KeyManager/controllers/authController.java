@@ -10,14 +10,19 @@ import com.manager.KeyManager.services.arduinoActionService;
 import com.manager.KeyManager.services.loginSaverService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.scheduling.annotation.Async;
+import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.concurrent.CompletableFuture;
+
 @RestController
 @RequestMapping("/auth")
+@EnableAsync
 public class authController {
   @Autowired
   usersRepository usersRepository;
@@ -33,13 +38,24 @@ public class authController {
 
   @Autowired
   arduinoActionService arduinoActionService;
+  public CompletableFuture<String> asyncEndpoint() {
+    return CompletableFuture.supplyAsync(() -> {
+      try {
+        this.arduinoActionService.setAction(1);
+        Thread.sleep(10000);
+        this.arduinoActionService.setAction(0);
+      } catch (InterruptedException e) {
+        e.printStackTrace();
+      }
+      return "Operação Assíncrona Completa!";
+    });
+  }
 
   @GetMapping("/verifyLogin")
   public ResponseEntity verifyLoginState() {
-    this.arduinoActionService.setAction(1);
+    asyncEndpoint();
     return ResponseEntity.ok().build();
   }
-
   @GetMapping("/login")
   public ResponseEntity login(){
     if(this.loginSaverService.getLastID() != 0){
